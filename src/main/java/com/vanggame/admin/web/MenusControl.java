@@ -36,35 +36,27 @@ public class MenusControl {
 		if (admin == null) {
 			return null;
 		}
-		Log.d("admin" +admin.toJSON());
+		Log.d("admin" + admin.toJSON());
 		AdminRole role = roleService.getAdminRoleByID(admin.getAdminRoleID());
-		
-		List<Menus> list = menusService.getTreeMenus();
+
+		List<Menus> menus = menusService.getMenusByPermission(role);
+
 		JSONArray array = new JSONArray();
-		if (null != list && list.size() > 0) {
-			JSONArray children = new JSONArray();
-			for (Menus m : list) {
-				JSONObject json = m.toJSON();
-				json.put("isChecked", roleService.hasPermission(role, m));
-
-				if (m.getChildren() != null) {
-					JSONArray chaildren = new JSONArray();
-					for (Menus c : m.getChildren()) {
-
-						JSONObject cj = c.toJSON();
-						// cj.put("isChecked",
-						// adminRoleManager.hasPermission(role, c));
-						children.add(cj);
-					}
-					json.put("children", children);
+		for (Menus menu : menus) {
+			JSONObject json = menu.toJSON();
+			if (menu.getChildren() != null && menu.getChildren().size() > 0) {
+				JSONArray carray = new JSONArray();
+				for (Menus c : menu.getChildren()) {
+					carray.add(c.toJSON());
 				}
-				array.add(json);
-				
+				json.put("childMenus", carray);
 			}
-			
-			
+			array.add(json);
 		}
-		Log.d(array.toJSONString().toString());
+
+		Log.d(array.toString());
+
+		System.out.println("返回的" + array.toJSONString().toString());
 		return array.toJSONString();
 	}
 }

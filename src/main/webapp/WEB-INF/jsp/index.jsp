@@ -9,7 +9,7 @@
 <html>
 <head>
  <link rel="icon" href="../images/favicon.ico">
-    <title>U8Server后台管理系统|U8SDK</title>
+    <title>Server后台管理系统</title>
   <link rel="icon" href="../images/favicon.ico">
   <link rel="stylesheet" type="text/css" href="../js/plugins/easyui/themes/black/easyui.css">
   <link rel="stylesheet" type="text/css" href="../js/plugins/easyui/themes/icon.css">

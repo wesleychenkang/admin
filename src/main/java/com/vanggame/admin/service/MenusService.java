@@ -132,7 +132,6 @@ public class MenusService {
 		for (Menus m : roots) {
 
 			for (Menus n : all) {
-
 				if (n.getParentID().equals(m.getId())) {
 					if (m.getChildren() == null) {
 						m.setChildren(new ArrayList<Menus>());
