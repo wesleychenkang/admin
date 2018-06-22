@@ -1,0 +1,20 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.vanggame.admin.dao.AdminDao">
+ 	<select id="queryByAccount" resultType="Admin">
+	    select * 
+	    from t_admin
+	    where username = #{username}
+	</select>
+	
+	<delete id="deleteAdmin">
+		delete from t_admin where id=#{id}
+	</delete>
+	
+	<select id="queryAllAccount" resultType="com.vanggame.admin.entity.Admin">
+	 select * 
+	    from t_admin
+	</select>
+ </mapper>

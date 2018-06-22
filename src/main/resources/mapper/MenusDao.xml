@@ -1,0 +1,11 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.vanggame.admin.dao.MenusDao">
+ 	<select id="getAllMenus" resultType="com.vanggame.admin.entity.Menus">
+	    select id, createTime, name, parentID, path
+	    from t_usysmenu
+	</select>
+ </mapper>
+ 

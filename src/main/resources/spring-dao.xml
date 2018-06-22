@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd">
+	<!-- 配置整合mybatis过程 -->
+	<!-- 1.配置数据库相关参数 properties的属性 ：${url} -->
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	
+	<!-- 
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean"> 
+		<property name="locations"> 
+			<list> <value>classpath:spring/jdbc.properties</value> </list> 
+		</property> 
+	</bean> 
+	-->
+
+	<!-- 2.数据库连接池 -->
+	<bean id="adminSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<!-- 配置连接池属性 -->
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- 连接池的私有属性 -->
+		<property name="initialPoolSize" value="10" />
+		<property name="minPoolSize" value="10" />
+		<property name="maxPoolSize" value="50" />
+		<property name="maxIdleTime" value="600" />
+	<!-- 	<property name="idleConnectionTestPeriod" value="55" />
+		<property name="preferredTestQuery" value="SELECT 1" /> -->
+		<!-- 获取连接超时时间 -->
+		<property name="checkoutTimeout" value="1000" />
+		<!-- 当获取连接失败重试次数 -->
+		<property name="acquireRetryAttempts" value="3" />
+		<!-- <property name="testConnectionOnCheckin" value="true" /> -->
+	</bean>
+
+<!-- 	<bean id="snsSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"> -->
+ 		<!-- 配置连接池属性 --> 
+<!-- 		<property name="driverClass" value="${jdbc.driver}" /> -->
+<!-- 		<property name="jdbcUrl" value="${jdbc.snsUrl}" /> -->
+<!-- 		<property name="user" value="${jdbc.snsUsername}" /> -->
+<!-- 		<property name="password" value="${jdbc.snsPassword}" /> -->
+
+ 		<!-- 连接池的私有属性 --> 
+<!-- 		<property name="initialPoolSize" value="5" /> -->
+<!-- 		<property name="minPoolSize" value="5" /> -->
+<!-- 		<property name="maxPoolSize" value="10" /> -->
+<!-- 		<property name="maxIdleTime" value="600" /> -->
+<!-- 		<property name="idleConnectionTestPeriod" value="60" /> -->
+<!-- 		<property name="preferredTestQuery" value="SELECT 1" /> -->
+ 		<!-- 获取连接超时时间 --> 
+<!-- 		<property name="checkoutTimeout" value="1000" /> -->
+		<!-- 当获取连接失败重试次数 -->
+<!-- 		<property name="acquireRetryAttempts" value="3" /> -->
+<!-- 		<property name="testConnectionOnCheckin" value="true" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="dynamicDataSource" class="com.vanggame.faq.util.DynamicDataSource"> --> 
+<!-- 		<property name="targetDataSources">   -->
+<!--         <map>   -->
+<!--             <entry value-ref="faqSource" key="faqSource"></entry>   -->
+<!--             <entry value-ref="snsSource" key="snsSource"></entry>   -->
+<!--         </map>   -->
+<!--     </property>   -->
+<!--     <property name="defaultTargetDataSource" ref="faqSource" />  -->
+<!-- 	 </bean> -->
+	<!-- 3.配置sqlSessionFactory对象 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据库连接池 -->
+<!-- 		<property name="dataSource" ref="dynamicDataSource" /> -->
+		<property name="dataSource" ref="adminSource" />
+		<!-- 配置MyBatis全局配置文件：mybatis-config.xml -->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<!-- 扫描entity包 使用别名 -->
+		<property name="typeAliasesPackage" value="com.vanggame.admin.entity" />
+		<!-- 扫描sql配置文件：mapper需要的xml文件 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml" />
+	</bean>
+
+	<!-- 4.配置扫描dao接口包，动态实现Dao接口，注入到spring容器中 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 注入sqlSessionFactory -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<!-- 给出扫描Dao接口包 -->
+		<property name="basePackage" value="com.vanggame.admin.dao" />
+	</bean>
+
+</beans>
