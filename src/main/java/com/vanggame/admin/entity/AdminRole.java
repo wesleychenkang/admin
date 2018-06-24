@@ -2,6 +2,13 @@ package com.vanggame.admin.entity;
 
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
+
+/**
+ * 试一下
+ * @author chen
+ *
+ */
 public class AdminRole {
 	
 	private Integer id; // ID,唯一，主键
@@ -11,7 +18,17 @@ public class AdminRole {
 	private Date createTime; // 创建时间
 	private Integer creatorID; // 创建人(管理员)
 	private Integer topRole; // 是否为最高权限(如果为1，则所有功能，所有游戏都可以管理)
-
+	
+	   public JSONObject toJSON(){
+	        JSONObject json = new JSONObject();
+	        json.put("id", id);
+	        json.put("roleName", roleName);
+	        json.put("roleDesc", roleDesc);
+	        json.put("permission", permission);
+	        json.put("topRole", topRole);
+	        return json;
+	    }
+   
 	public Integer getId() {
 		return id;
 	}
