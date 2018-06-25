@@ -1,7 +1,9 @@
 package com.vanggame.admin.entity;
 
+import com.alibaba.fastjson.JSONObject;
+
 public class Game {
-	
+
 	private Integer tid;
 	private Integer aid;
 	private String key;
@@ -10,6 +12,16 @@ public class Game {
 	private Integer g_type;
 	private String h5_url;
 	private String pay_callback;
+
+	public JSONObject toJsonObject() {
+		JSONObject json = new JSONObject();
+		json.put("appID", aid);
+		json.put("appkey", key);
+		json.put("appSecret", app_screte);
+		json.put("name", dec);
+		json.put("payCallback", pay_callback);
+		return json;
+	}
 
 	public Integer getTid() {
 		return tid;

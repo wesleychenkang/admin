@@ -13,21 +13,26 @@ public class GameService {
 
 	@Autowired
 	private GameDao gameDao;
-	
 
 	public List<Game> queryAllGames() {
 
 		return gameDao.queryAllGames();
 
 	}
-	
-	
-	public List<Game> queryGames(Integer appId,String appName,Integer pageNo,Integer pageSize){
-		
+
+	public List<Game> queryGames(Integer appId, String appName, Integer pageNo, Integer pageSize) {
+
 		return gameDao.queryGames(appId, appName, pageNo, pageSize);
 	}
-	
-	
-	
+
+	public void saveGame(Game game) {
+
+		gameDao.saveGame(game);
+	}
+
+	public void upDateGame(Game game) {
+
+		//
+	}
 
 }
