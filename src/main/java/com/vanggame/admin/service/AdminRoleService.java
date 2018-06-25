@@ -34,6 +34,10 @@ public class AdminRoleService {
 		
 	}
 	
+	public void updateAdminRole(String adminRoleID,String rolePermission){
+		roleDao.updateAdminRole(adminRoleID,rolePermission);
+	}
+	
     //指定角色是否有对应的功能权限
     public boolean hasPermission(AdminRole role, Menus menu){
         if(role == null || menu == null){

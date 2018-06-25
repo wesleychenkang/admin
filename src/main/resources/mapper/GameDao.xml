@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.vanggame.admin.dao.GameDao">
+ 	<select id="queryAllGames" resultType="Game">
+	    select aid,key,app_screte,dec,g_type,h5_url,pay_callback
+	    from t_app
+	</select>
+	
+	<delete id="removeGame">
+		delete from t_app where tid=#{id}
+	</delete>
+	
+	<select id="queryGames" resultType="Game">
+	 select aid,key,app_screte,dec,g_type,h5_url,pay_callback
+	    from t_app 
+	     <if test="aid!=null">
+	    where aid=#{appId} 
+	    </if>
+	    <if test="dec!=null">
+	       where dec LIKE "%"#{appName}"%"
+	    </if>
+	</select>
+	
+	<insert id="saveGame" parameterType="Game" useGeneratedKeys="true" keyProperty="tid" >
+	
+	  insert into t_app (aid,key,app_screte,dec,g_type,h5_url,pay_callback) values
+	  (#{aid},#{key},#{app_screte},#{dec},#{g_type},#{h5_url},#{pay_callback})
+	  
+	</insert>
+	 
+	 <update id="updateGame" parameterType="Game">
+	   update t_app set aid=#{aid},dec=#{dec}, g_type=#{g_type}
+	 , h5_url=#{h5_url}, g_type=#{g_type}, pay_callback=#{pay_callback} where tid=#{tid}
+	 </update>
+	
+ </mapper>

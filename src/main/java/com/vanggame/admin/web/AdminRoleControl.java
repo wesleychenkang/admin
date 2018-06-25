@@ -54,6 +54,17 @@ public class AdminRoleControl {
 		return array.toJSONString();
 	}
 
+	@RequestMapping(value = "updateRolePermission")
+	@ResponseBody
+	public void updateRolePermission(String adminRoleID,String rolePermission) {
+		try {
+			roleService.updateAdminRole(adminRoleID,rolePermission);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 	private String renderState(boolean suc, String msg) {
 		JSONObject json = new JSONObject();
 		json.put("state", suc ? 1 : 0);

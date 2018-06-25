@@ -54,8 +54,9 @@ public class AdminControl {
 				return renderState(false, "name or password is null");
 			}
 			Admin ex = adminService.getByAccount(admin.getUsername());
-			String passWord = ex.getPassword();
+		    
 			if (ex != null) {
+				String passWord = ex.getPassword();
 				// 说明只是修改信息
 				ex.setAdminRoleID(role.getId());
 				ex.setAdminRoleName(role.getRoleName());
@@ -68,7 +69,7 @@ public class AdminControl {
 			System.out.println(admin.toJSON());
 			admin.setAdminRoleName(role.getRoleName());
 			admin.setAdminRoleID(role.getId());
-			admin.setPassword(EncryptUtils.md5(passWord));
+			admin.setPassword(EncryptUtils.md5(admin.getPassword()));
 			adminService.saveAdmin(admin);
 			return renderState(true, "add success");
 		} catch (Exception e) {

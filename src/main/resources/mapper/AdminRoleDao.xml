@@ -19,4 +19,8 @@
   insert into t_adminrole (createTime,creatorID,permission,roleDesc,roleName)
   values (#{createTime},#{creatorID},#{permission},#{roleDesc},#{roleName})
 </insert>
+
+<update id="updateAdminRole">
+ update t_adminrole set permission = #{rolePermission} where id = #{adminRoleID}
+</update>
 </mapper>
