@@ -14,4 +14,8 @@ public interface AdminDao {
 	
 	List<Admin> queryAllAccount();
 	
+	void updateAdmin(Admin admin);
+	
+	
+	
 }

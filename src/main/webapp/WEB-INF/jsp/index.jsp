@@ -70,7 +70,7 @@
 	      $.ajax({
 	        type:'POST',
 	        dataType:'json',
-	        url:'<%=basePath%>/menus/getMyMenus',
+	        url:'<%=basePath%>/admin/getAllMenus',
 	        success:function(data){
 	        	console.log(data)
 	          $.each(data, function(i, item){
@@ -87,7 +87,7 @@
 
 	              xhtml += '<ul>'
 	              $.each(item.childMenus, function(m, c){
-	                 xhtml += ' <li style=""><a href=\'javascript:addTab(\"tabId_' + c.id + '\",\"'+ c.name + '\",\"/' + c.path + '\");\'>' + c.name + '</a></li>'
+	                  xhtml += ' <li style=""><a href=\'javascript:addTab(\"tabId_' + c.id + '\",\"'+ c.name + '\",\"<%=basePath%>/' + c.path + '\");\'>' + c.name + '</a></li>'
 	              });
 	              xhtml += '</ul>';
 	            }

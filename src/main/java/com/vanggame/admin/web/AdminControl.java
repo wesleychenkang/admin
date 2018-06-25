@@ -25,21 +25,10 @@ public class AdminControl {
 	@Autowired
 	private AdminService adminService;
 
+	
 	@RequestMapping(value = "adminRoleManage")
 	public String adminRoleManage() {
 		return "admin";
-	}
-
-	@RequestMapping(value = "getAllAdminRoles")
-	@ResponseBody
-	public String getAllAdminRoles() {
-		List<AdminRole> list = roleService.getAllAdminRoles();
-		JSONArray array = new JSONArray();
-		for (AdminRole role : list) {
-			array.add(role.toJSON());
-		}
-
-		return array.toJSONString();
 	}
 
 	@RequestMapping(value = "getAllAdmins")
@@ -104,6 +93,14 @@ public class AdminControl {
 		return renderState(false, "remove fail");
 		
 	}
+	
+	@RequestMapping(value = "adminPermissionManage")
+	public String adminPermissionManage() {
+		
+		return "adminPermissions";
+	}
+	
+
 
 	private String renderState(boolean suc, String msg) {
 		JSONObject json = new JSONObject();

@@ -9,7 +9,7 @@
 	    where username = #{username}
 	</select>
 	
-	<delete id="deleteAdmin">
+	<delete id="deleteAdminById">
 		delete from t_admin where id=#{id}
 	</delete>
 	
@@ -17,4 +17,17 @@
 	 select * 
 	    from t_admin
 	</select>
+	
+	<insert id="addAdmin" parameterType="Admin" useGeneratedKeys="true" keyProperty="id" >
+	
+	  insert into t_admin(adminRoleID,password,username,adminRoleName,adminGames) values
+	  (#{adminRoleID},#{password},#{username},#{adminRoleName},#{adminGames})
+	  
+	</insert>
+	 
+	 <update id="updateAdmin" parameterType="Admin">
+	   update t_admin set username=#{username},adminRoleID=#{adminRoleID}, password=#{password}
+	 , adminRoleName=#{adminRoleName} where id=#{id}
+	 </update>
+	
  </mapper>

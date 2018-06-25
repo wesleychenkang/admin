@@ -10,6 +10,25 @@
 		http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        
+        
+    <!-- <据说要在前配置mvc:annotation-driven />响应的类型添加与乱码问题的全局解决 -->
+	<!-- -<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/html;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean> 
+	-->
 
 	<!-- 配置springMVC -->
 	<!-- 1、开启SpringMVC注解模式 -->

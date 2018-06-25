@@ -10,5 +10,13 @@
 	id = #{adminRoleID}
 </select>
 
+<select id="getAllAdminRoles" resultType="AdminRole">
+	select *
+	from t_adminrole
+</select>
 
+<insert id="saveAdminRole" parameterType="AdminRole" useGeneratedKeys="true" keyProperty="id">
+  insert into t_adminrole (createTime,creatorID,permission,roleDesc,roleName)
+  values (#{createTime},#{creatorID},#{permission},#{roleDesc},#{roleName})
+</insert>
 </mapper>

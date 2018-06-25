@@ -1,6 +1,7 @@
 package com.vanggame.admin.web;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,7 +21,7 @@ import com.vanggame.admin.service.MenusService;
 import com.vanggame.admin.util.CommonConst;
 
 @Controller
-@RequestMapping(value = "menus")
+@RequestMapping(value = "admin")
 public class MenusControl {
 
 	@Autowired
@@ -29,7 +30,7 @@ public class MenusControl {
 	@Autowired
 	private AdminRoleService roleService;
 
-	@RequestMapping(value = "getMyMenus")
+	@RequestMapping(value = "getAllMenus")
 	@ResponseBody
 	public String getMyMenus(HttpSession session) {
 		Admin admin = (Admin) session.getAttribute(CommonConst.STRING_ADMIN);
@@ -59,4 +60,20 @@ public class MenusControl {
 		System.out.println("返回的" + array.toJSONString().toString());
 		return array.toJSONString();
 	}
+	
+//	@RequestMapping(value = "getAllMenus")
+//	@ResponseBody
+//	public Map<String, Object> getAllMenus() {
+//
+//		return null;
+//	}
+
+	@RequestMapping(value = "getAllRootMenus")
+	@ResponseBody
+	public String getAllRootMenus() {
+
+		return "";
+	}
+
+	
 }
