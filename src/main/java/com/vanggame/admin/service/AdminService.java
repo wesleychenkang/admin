@@ -1,5 +1,6 @@
 package com.vanggame.admin.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.vanggame.admin.dao.AdminDao;
 import com.vanggame.admin.entity.Admin;
+import com.vanggame.admin.entity.AdminRole;
 import com.vanggame.admin.log.Log;
 
 @Service
@@ -14,6 +16,9 @@ public class AdminService {
 
 	@Autowired
 	private AdminDao aDao;
+	
+	@Autowired
+	private AdminRoleService roleService;
 
 	public Admin getByAccount(String account) {
 		return aDao.queryByAccount(account);
@@ -42,9 +47,23 @@ public class AdminService {
 		aDao.deleteAdminById(admin.getId());
 	}
 
-	private boolean login(String name, String password) {
+	
+	 public List<String> getPermissonedGameIDs( Admin admin){
+	        AdminRole role = roleService.getAdminRoleByID(admin.getAdminRoleID());
+	        
+	        if(role.getTopRole() != null && role.getTopRole().equals(1)){ //topRole 代表是管理人员具有最高权限
+	            return null;
+	        }
+	        if(admin.getAdminGames() != null){
+	            String[] ids = admin.getAdminGames().split(",");
+	            List<String> all = new ArrayList<String>();
+	            for(int i=0; i<ids.length;i++){
+	                all.add(ids[i]);
+	            }
+	            return all;
+	        }
+	        return null;
+	    }
 
-		return false;
-	}
 
 }

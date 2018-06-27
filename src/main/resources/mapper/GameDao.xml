@@ -3,9 +3,16 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
  <mapper namespace="com.vanggame.admin.dao.GameDao">
- 	<select id="queryAllGames" resultType="Game">
-	    select aid,key,app_screte,dec,g_type,h5_url,pay_callback
-	    from t_app
+ 	<select id="queryAllGamesCount" resultType="java.lang.Integer">
+	    select count(*) from t_app 
+	    <where>
+	     <if test="perrsion!=null">
+	       aid in  
+	       <foreach collection="perrsion" index="index" item="item" open="(" separator="," close=")">  
+            #{item}   
+           </foreach>
+	    </if>
+	    </where>
 	</select>
 	
 	<delete id="removeGame">
@@ -13,20 +20,35 @@
 	</delete>
 	
 	<select id="queryGames" resultType="Game">
-	 select aid,key,app_screte,dec,g_type,h5_url,pay_callback
-	    from t_app 
-	     <if test="aid!=null">
-	    where aid=#{appId} 
-	    </if>
-	    <if test="dec!=null">
-	       where dec LIKE "%"#{appName}"%"
-	    </if>
+	 select  aid,`key`,appSecret,`dec`,g_type,h5_url,pay_callback
+	    from t_app <include refid="where"></include>
 	</select>
+	
+	<sql id="where">
+	 <where>
+	   <if test="appId!=null">
+	      aid=#{appId}
+	    </if>
+	    <if test="appName!=null">
+	      and  `dec` LIKE "%"#{appName}"%"
+	    </if>
+	    <if test="perrsion!=null">
+	       aid in  
+	       <foreach collection="perrsion" index="index" item="item" open="(" separator="," close=")">  
+            #{item}   
+           </foreach>
+	    </if>
+	     
+	 </where>
+	 <if test="currIndex!=null and pageSize!=null">
+	      limit #{currIndex},#{pageSize}
+	 </if>
+	</sql>
 	
 	<insert id="saveGame" parameterType="Game" useGeneratedKeys="true" keyProperty="tid" >
 	
-	  insert into t_app (aid,key,app_screte,dec,g_type,h5_url,pay_callback) values
-	  (#{aid},#{key},#{app_screte},#{dec},#{g_type},#{h5_url},#{pay_callback})
+	  insert into t_app (aid,`key`,appSecret,`dec`,g_type,h5_url,pay_callback) values
+	  (#{aid},#{key},#{appSecret},#{dec},#{g_type},#{h5_url},#{pay_callback})
 	  
 	</insert>
 	 

@@ -2,13 +2,19 @@ package com.vanggame.admin.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.vanggame.admin.entity.Admin;
 import com.vanggame.admin.entity.Game;
+import com.vanggame.admin.log.Log;
+import com.vanggame.admin.service.AdminService;
 import com.vanggame.admin.service.GameService;
 
 @Controller
@@ -18,23 +24,36 @@ public class GameControl extends BaseControl {
 	@Autowired
 	private GameService gameService;
 
+	@Autowired
+	private AdminService adminService;
+
 	@RequestMapping(value = "showGames", produces = ("application/text;charset=utf-8"))
 	public String showGames() {
 		return "games";
 
 	}
 
-	@RequestMapping(value = "getAllGames", produces = ("application/text;charset=utf-8"))
+	@RequestMapping(value = "getAllGames", produces = ("text/json;charset=utf-8"))
 	@ResponseBody
-	public String getAllGames() {
-		List<Game> list = gameService.queryAllGames();
+	public String getAllGames(HttpSession session, Integer appID, String name, Integer page, Integer rows) {
+		System.out.println("start all games appId" + appID + "name" + name + "page" + page + "rows" + rows);
+		Log.d("start all games appId:%s;name:%s;page:%s;rows:%s", appID, name, page, rows);
+		Admin admin = getSessionAdmin(session);
+		List<String> permiss = adminService.getPermissonedGameIDs(admin);
+		int count = gameService.queryAllGamesCount(permiss);
+		System.out.println("count" + count);
+		List<Game> list = gameService.queryGames(appID, name, page, rows, permiss);
+
 		JSONArray array = new JSONArray();
 		for (Game game : list) {
 			array.add(game.toJsonObject());
-
 		}
-		return array.toJSONString();
 
+		JSONObject json = new JSONObject();
+		json.put("rows", array);
+		json.put("total", count);
+		System.out.println("all game" + json.toJSONString());
+		return json.toJSONString();
 	}
 
 	/**
@@ -49,7 +68,7 @@ public class GameControl extends BaseControl {
 			gameService.saveGame(game);
 			return renderState(true, "add sucess");
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return renderState(false, "add fail");
 	}

@@ -7,7 +7,7 @@ public class Game {
 	private Integer tid;
 	private Integer aid;
 	private String key;
-	private String app_screte;
+	private String appSecret; // app_screte 用不了
 	private String dec;
 	private Integer g_type;
 	private String h5_url;
@@ -17,7 +17,8 @@ public class Game {
 		JSONObject json = new JSONObject();
 		json.put("appID", aid);
 		json.put("appkey", key);
-		json.put("appSecret", app_screte);
+		json.put("appSecret", appSecret);
+		System.out.println("app_screte" + appSecret);
 		json.put("name", dec);
 		json.put("payCallback", pay_callback);
 		return json;
@@ -45,14 +46,6 @@ public class Game {
 
 	public void setKey(String key) {
 		this.key = key;
-	}
-
-	public String getApp_screte() {
-		return app_screte;
-	}
-
-	public void setApp_screte(String app_screte) {
-		this.app_screte = app_screte;
 	}
 
 	public String getDec() {
@@ -85,6 +78,14 @@ public class Game {
 
 	public void setPay_callback(String pay_callback) {
 		this.pay_callback = pay_callback;
+	}
+
+	public String getAppSecret() {
+		return appSecret;
+	}
+
+	public void setAppSecret(String appSecret) {
+		this.appSecret = appSecret;
 	}
 
 }

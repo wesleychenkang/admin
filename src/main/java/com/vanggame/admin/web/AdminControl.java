@@ -2,6 +2,8 @@ package com.vanggame.admin.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import com.vanggame.admin.entity.Admin;
 import com.vanggame.admin.entity.AdminRole;
 import com.vanggame.admin.service.AdminRoleService;
 import com.vanggame.admin.service.AdminService;
+import com.vanggame.admin.util.CommonConst;
 import com.vanggame.admin.util.EncryptUtils;
 
 @Controller
@@ -25,7 +28,6 @@ public class AdminControl {
 	@Autowired
 	private AdminService adminService;
 
-	
 	@RequestMapping(value = "adminRoleManage")
 	public String adminRoleManage() {
 		return "admin";
@@ -54,7 +56,7 @@ public class AdminControl {
 				return renderState(false, "name or password is null");
 			}
 			Admin ex = adminService.getByAccount(admin.getUsername());
-		    
+
 			if (ex != null) {
 				String passWord = ex.getPassword();
 				// 说明只是修改信息
@@ -78,8 +80,7 @@ public class AdminControl {
 		}
 		return renderState(false, "add fail");
 	}
-	
-	
+
 	@RequestMapping(value = "removeAdmin")
 	@ResponseBody
 	public String removeAdmin(Admin admin) {
@@ -90,19 +91,28 @@ public class AdminControl {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		
+
 		return renderState(false, "remove fail");
-		
+
 	}
-	
+
 	@RequestMapping(value = "adminPermissionManage")
 	public String adminPermissionManage() {
-		
+
 		return "adminPermissions";
 	}
+
+	@RequestMapping(value = "getAllAdminList")
+	public String getAllAdminList(HttpSession session) {
+		
+		Admin admin = (Admin) session.getAttribute(CommonConst.STRING_ADMIN);
+		 
+		
+		return "";
+	}
 	
-
-
+	
+	  
 	private String renderState(boolean suc, String msg) {
 		JSONObject json = new JSONObject();
 		json.put("state", suc ? 1 : 0);
