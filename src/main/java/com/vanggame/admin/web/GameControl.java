@@ -80,8 +80,15 @@ public class GameControl extends BaseControl {
 	 */
 	@RequestMapping(value = "removeGame")
 	@ResponseBody
-	public void removeGame(int currAppID) {
-
+	public String removeGame(int currAppID) {
+          System.out.println("currAppID" + currAppID);
+          try{
+          gameService.removeGame(currAppID);
+     	 return renderState(true, "remove success");
+          }catch(Exception e){
+        	  
+        	 return renderState(false, "remove fail");
+          }
 	}
 
 }

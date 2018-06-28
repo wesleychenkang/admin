@@ -79,6 +79,11 @@
         <label >游戏名称：</label>
         <input type="text" class="easyui-textbox" style="height: 25px;" name="name" maxlength="255" required="false" />
       </div>
+      
+      <div class="u8_form_row">
+        <label >游戏APPID：</label>
+        <input type="text" class="easyui-textbox" style="height: 25px;" name="appID" maxlength="255" required="false" />
+      </div>
 
       <div class="u8_form_row">
         <label >权限指派：</label>

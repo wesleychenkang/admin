@@ -50,5 +50,10 @@ public class GameService {
 	public void upDateGame(Game game) {
 
 	}
+	
+	public void removeGame(int currAppId){
+		
+		gameDao.removeGame(currAppId);
+	}
 
 }

@@ -16,7 +16,7 @@
 	</select>
 	
 	<delete id="removeGame">
-		delete from t_app where tid=#{id}
+		delete from t_app where aid=#{id}
 	</delete>
 	
 	<select id="queryGames" resultType="Game">
