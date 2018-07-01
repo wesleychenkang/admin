@@ -53,7 +53,7 @@
 	</insert>
 	 
 	 <update id="updateGame" parameterType="Game">
-	   update t_app set aid=#{aid},dec=#{dec}, g_type=#{g_type}
+	   update t_app set aid=#{aid},`dec`=#{dec}, g_type=#{g_type}
 	 , h5_url=#{h5_url}, g_type=#{g_type}, pay_callback=#{pay_callback} where tid=#{tid}
 	 </update>
 	

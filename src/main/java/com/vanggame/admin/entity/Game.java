@@ -15,6 +15,7 @@ public class Game {
 
 	public JSONObject toJsonObject() {
 		JSONObject json = new JSONObject();
+		json.put("tid", tid);
 		json.put("appID", aid);
 		json.put("appkey", key);
 		json.put("appSecret", appSecret);

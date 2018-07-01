@@ -74,7 +74,7 @@
        closed="true" buttons="#dlg-buttons" style="height: 300px">
     <div class="ftitle">游戏信息</div>
     <form id="fm" method="post" novalidate>
-      <input id="appID" type="hidden" name="appID" />
+      <input id="tid" type="hidden" name="tid" />
       <div class="u8_form_row">
         <label >游戏名称：</label>
         <input type="text" class="easyui-textbox" style="height: 25px;" name="name" maxlength="255" required="false" />

@@ -2,6 +2,7 @@ package com.vanggame.admin.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,24 @@ public class GameControl extends BaseControl {
 	 */
 	@RequestMapping(value = "saveGame")
 	@ResponseBody
-	public String saveGame(Game game) {
+	public String saveGame(HttpServletRequest request, Integer appID, Integer tid) {
+
+		// parmmer:appID
+		// parmmer:name
+		// parmmer:admins
+		// parmmer:payCallback
+		// parmmer:msdkPayCallback
+		// parmmer:payCallbackDebug
+
+		String name = request.getParameter("name");
+		String admins = request.getParameter("admins");
+		String payCallback = request.getParameter("payCallback");
+
+		Game game = new Game();
+		game.setAid(appID);
+		game.setDec(name);
+		game.setTid(tid);
+		game.setPay_callback(payCallback);
 		try {
 			gameService.saveGame(game);
 			return renderState(true, "add sucess");
@@ -81,14 +99,14 @@ public class GameControl extends BaseControl {
 	@RequestMapping(value = "removeGame")
 	@ResponseBody
 	public String removeGame(int currAppID) {
-          System.out.println("currAppID" + currAppID);
-          try{
-          gameService.removeGame(currAppID);
-     	 return renderState(true, "remove success");
-          }catch(Exception e){
-        	  
-        	 return renderState(false, "remove fail");
-          }
+		System.out.println("currAppID" + currAppID);
+		try {
+			gameService.removeGame(currAppID);
+			return renderState(true, "remove success");
+		} catch (Exception e) {
+
+			return renderState(false, "remove fail");
+		}
 	}
 
 }
