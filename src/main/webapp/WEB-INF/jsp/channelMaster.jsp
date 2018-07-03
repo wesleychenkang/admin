@@ -56,10 +56,8 @@
         <div id="tb" style="float: right;">
           <input id="search_box" class="easyui-searchbox" style="width: 250px;height: 25px;"  data-options="searcher:doSearch,prompt:'请输入查询词',menu:'#search_menu'" />
           <div id="search_menu" style="width:100px">
-            <div data-options="name:'channel_name'">渠道名称</div>
-            <div data-options="name:'channel_id'">渠道商ID</div>
-            <div data-options="name:'name_suffix'">名称后缀</div>
-            <div data-options="name:'verify_class'">处理类</div>
+            <div data-options="name:'channelName'">渠道名称</div>
+            <div data-options="name:'channelId'">渠道商ID</div>
           </div>
         </div>
       </div>
@@ -70,40 +68,17 @@
          closed="true" buttons="#dlg-buttons">
       <div class="ftitle">渠道商信息</div>
       <form id="fm" method="post" novalidate>
-        <input type="hidden" name="masterID" value="0"/>
-        <div class="u8_form_row">
-          <label >渠道商名称：</label>
-          <input type="text" class="easyui-textbox" style="height: 25px;" name="masterName" maxlength="255" required="false" />
-        </div>
-
-        <div class="u8_form_row">
-          <label >SDK名称：</label>
-          <input type="text" class="easyui-textbox" style="height: 25px;" name="sdkName" maxlength="255" required="false" />
+        <input type="hidden" name=tid />
+        
+         <div class="u8_form_row">
+          <label >渠道商ID：</label>
+          <input type="text" class="easyui-textbox" style="height: 25px;" name="channelId" maxlength="255" required="false" />
         </div>
         <div class="u8_form_row">
-          <label >用户名后缀：</label>
-          <input type="text" class="easyui-textbox" style="height: 25px;" name="nameSuffix" maxlength="255" required="false" />
+          <label >渠道商名：</label>
+          <input type="text" class="easyui-textbox" style="height: 25px;" name="channelName" maxlength="255" required="false" />
         </div>
-
-        <div class="u8_form_row">
-          <label >登录认证地址：</label>
-          <input type="text" class="easyui-textbox" style="height: 25px;" name="authUrl" maxlength="1024" required="false" />
-        </div>
-
-        <div class="u8_form_row">
-          <label >支付回调地址：</label>
-          <input type="text" class="easyui-textbox" style="height: 25px;" name="payCallbackUrl" maxlength="1024" required="false" />
-        </div>
-
-        <div class="u8_form_row">
-          <label >渠道下单地址：</label>
-          <input type="text" class="easyui-textbox" style="height: 25px;" name="orderUrl" maxlength="1024" novalidate />
-        </div>
-
-        <div class="u8_form_row">
-          <label >脚本类路径：</label>
-          <input type="text" class="easyui-textbox" style="height: 25px;" name="verifyClass" maxlength="1024" required="false" />
-        </div>
+       
       </form>
     </div>
     <div id="dlg-buttons">
@@ -160,7 +135,7 @@
             '确定要删除该渠道商吗？(操作不可恢复)',
             function(r){
               if(r){
-                $.post('<%=basePath%>/admin/channelMaster/removeMaster', {currMasterID:row.masterID}, function(result){
+                $.post('<%=basePath%>/admin/channelMaster/removeMaster', {currMasterID:row.tid}, function(result){
                   if (result.state == 1) {
                     $('#dialog_add').dialog('close');
                     $("#masters").datagrid('reload');
@@ -211,16 +186,16 @@
 
       function doSearch(value, name){
 
-        if(name == "channel_name"){
+        if(name == "channelName"){
           $("#masters").datagrid({
             queryParams:{
-              masterName:value
+            	channelName:value
             }
           });
-        }else if(name == "channel_id"){
+        }else if(name == "channelId"){
           $("#masters").datagrid({
             queryParams:{
-              masterID:value
+            	channelId:value
             }
           });
         }else if(name == "name_suffix"){
@@ -242,9 +217,9 @@
 
       $("#masters").datagrid({
         height:460,
-        url:'<%=basePath%>/admin/channelMaster/getAllChannelMasters',
+        url:'<%=basePath%>/admin/channelMaster/getAllChannelMaster',
         method:'POST',
-        idField:'masterID',
+        idField:'tid',
         striped:true,
         fitColumns:true,
         singleSelect:true,
@@ -256,11 +231,9 @@
         pageList:[10,20,50,100],
         showFooter:true,
         columns:[[
-          {field:'masterID', title:'ID', width:40, sortable:true},
-          {field:'sdkName', title:'使用的SDK', width:60, sortable:true},
-          {field:'masterName', title:'渠道商名称', width:60, sortable:true},
-          {field:'nameSuffix', title:'用户名后缀', width:60, sortable:true},
-          {field:'verifyClass', title:'SDK脚本路径', width:120, sortable:true}
+          {field:'tid', title:'tid'},
+          {field:'channelId', title:'渠道商ID', width:40, sortable:true},
+          {field:'channelName', title:'渠道商名称', width:60, sortable:true},
         ]],
         toolbar:'#easyui_toolbar'
       });

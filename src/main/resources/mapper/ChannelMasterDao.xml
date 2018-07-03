@@ -1,0 +1,45 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vanggame.admin.dao.ChannelMasterDao">
+	<select id="queryAllMasterCount" resultType="java.lang.Integer">
+		select count(*) from t_channel
+	</select>  
+	
+	<select id="queryChannelMaseter" resultType="ChannelMaster">
+	 select t_id as tid,channel_id as channelId,channel_name as channelName,channel_dec as channelDec ,
+	 create_time as createTime,create_admin as createAdmin from t_channel 
+	 <include refid="where"></include>
+	
+	</select>
+	
+	<insert id="saveMaster" parameterType="ChannelMaster" useGeneratedKeys="true" keyProperty="t_id" >
+	  insert into t_channel (`channel_id`,channel_name,`channel_dec`,create_time,create_admin) values
+	  (#{channelId},#{channelName},#{channelDec},#{createTime},#{createAdmin})
+	</insert>
+	
+	 <update id="updateMaster" parameterType="ChannelMaster">
+	   update t_channel set channel_id=#{channelId},`channel_name`=#{channelName}, channel_dec=#{channelDec}
+	 ,create_time=#{createTime}, create_admin=#{createAdmin} where t_id=#{tid}
+	 </update>
+	 <delete id="deleteMaster">
+		delete from t_channel where t_id=#{tid}
+	</delete>
+	 
+	
+	<sql id="where">
+	 <where>
+	   <if test="channelId!=null">
+	      channel_id=#{channelId}
+	    </if>
+	    <if test="channelName!=null">
+	      and  `channel_name` LIKE "%"#{channelName}"%"
+	    </if> 
+	 </where>  
+	  <if test="currIndex!=null and pageSize!=null">
+	      limit #{currIndex},#{pageSize}
+	 </if>
+	 </sql>
+	 </mapper>
+    
