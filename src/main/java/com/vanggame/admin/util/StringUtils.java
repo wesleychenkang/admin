@@ -1,6 +1,7 @@
 package com.vanggame.admin.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -8,28 +9,33 @@ import java.util.List;
  */
 public class StringUtils {
 
-    public static boolean isEmpty(String str){
+	public static boolean isEmpty(String str) {
 
-        return str == null || str.trim().length() == 0;
-    }
+		return str == null || str.trim().length() == 0;
+	}
 
-    public static List<String> split2list(String str, String regx){
+	public static List<String> split2list(String str, String regx) {
 
-        List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<String>();
 
-        if(isEmpty(str)){
-            return result;
-        }
+		if (isEmpty(str)) {
+			return result;
+		}
 
-        String[] splits = str.split(regx);
-        if(splits != null){
-            for(String s : splits){
-                if(!isEmpty(s)){
-                    result.add(s);
-                }
-            }
-        }
+		String[] splits = str.split(regx);
+		if (splits != null) {
+			for (String s : splits) {
+				if (!isEmpty(s)) {
+					result.add(s);
+				}
+			}
+		}
 
-        return result;
-    }
+		return result;
+	}
+
+	public String formatTime(Date date) {
+         
+		return "";
+	}
 }

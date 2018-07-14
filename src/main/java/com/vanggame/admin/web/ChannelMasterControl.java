@@ -21,16 +21,17 @@ public class ChannelMasterControl extends BaseControl {
 
 	@RequestMapping(value = "getAllChannelMaster")
 	@ResponseBody
-	public String getAllChannelMaster(Integer masterId, String masterName, Integer page, Integer rows) {
-		System.out.println("masterId" + masterId + "masterName = " + masterName);
-		List<ChannelMaster> list = masterService.getAllChannelMaster(masterId, masterName, page, rows);
+	public String getAllChannelMaster(Integer channelId, String channelName, Integer page, Integer rows) {
+		System.out.println("masterId" + channelId + "masterName = " + channelName);
+		List<ChannelMaster> count = masterService.getAllChannelMaster(null, null, null, null);
+		List<ChannelMaster> list = masterService.getAllChannelMaster(channelId, channelName, page, rows);
 		JSONObject json = new JSONObject();
 		JSONArray array = new JSONArray();
 		for (ChannelMaster channelMaster : list) {
 			array.add(channelMaster);
 		}
 		json.put("rows", array);
-		json.put("total", list.size());
+		json.put("total", count.size());
 		System.out.println(json.toJSONString());
 		return json.toJSONString();
 	}

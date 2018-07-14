@@ -1,0 +1,38 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vanggame.admin.dao.PayWayDao">
+	<select id="getAllPayWay" resultType="com.vanggame.admin.entity.PayWay">
+		select tid, payWayId,
+		payWayName, createTime, updateTime,permission
+		from pay_way
+	</select>
+
+	<select id="queryPayWay" resultType="PayWay">
+		select tid, payWayId,
+		payWayName, createTime, updateTime,permission
+		from pay_way where tid
+		=#{id}
+	</select>
+
+	<insert id="savePayWay" useGeneratedKeys="true" keyProperty="tid">
+		insert into pay_way (payWayId, payWayName, createTime,
+		updateTime,permission)
+		values(#{payWayId},#{payWayName},#{createTime},#{updateTime},#{permission})
+	</insert>
+
+	<update id="updatePayWay" parameterType="PayWay">
+		update pay_way set
+		payWayId = #{payWayId}, payWayName =
+		#{payWayName},createTime=#{createTime},
+
+		updateTime=#{updateTime},permission=#{permission} where tid = #{tid}
+	</update>
+
+	<delete id="deletePayWay">
+		delete from pay_way where tid = #{id}
+	</delete>
+
+</mapper>
+ 
