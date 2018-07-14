@@ -10,10 +10,77 @@ Target Server Type    : MYSQL
 Target Server Version : 50716
 File Encoding         : 65001
 
-Date: 2018-06-22 17:14:34
+Date: 2018-07-14 09:55:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `pay_vs_channel`
+-- ----------------------------
+DROP TABLE IF EXISTS `pay_vs_channel`;
+CREATE TABLE `pay_vs_channel` (
+  `tid` tinyint(4) NOT NULL,
+  `pay_way_id` tinyint(4) NOT NULL,
+  `pay_channel_id` tinyint(4) NOT NULL,
+  PRIMARY KEY (`tid`),
+  KEY `tpay` (`pay_way_id`),
+  KEY `tchannel` (`pay_channel_id`),
+  CONSTRAINT `tchannel` FOREIGN KEY (`pay_channel_id`) REFERENCES `pay_way_channel` (`tid`),
+  CONSTRAINT `tpay` FOREIGN KEY (`pay_way_id`) REFERENCES `pay_way` (`tid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pay_vs_channel
+-- ----------------------------
+INSERT INTO `pay_vs_channel` VALUES ('1', '1', '1');
+INSERT INTO `pay_vs_channel` VALUES ('2', '2', '1');
+INSERT INTO `pay_vs_channel` VALUES ('3', '3', '1');
+
+-- ----------------------------
+-- Table structure for `pay_way`
+-- ----------------------------
+DROP TABLE IF EXISTS `pay_way`;
+CREATE TABLE `pay_way` (
+  `tid` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `payWayId` tinyint(4) NOT NULL,
+  `payWayName` varchar(50) DEFAULT NULL,
+  `createTime` datetime DEFAULT NULL,
+  `updateTime` datetime DEFAULT NULL,
+  `permission` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`tid`,`payWayId`),
+  KEY `tid` (`tid`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pay_way
+-- ----------------------------
+INSERT INTO `pay_way` VALUES ('1', '0', '支付宝', '2018-07-09 16:31:27', '2018-07-09 16:31:32', 'wesley');
+INSERT INTO `pay_way` VALUES ('2', '1', '威富通', '2018-07-10 11:57:35', '2018-07-10 11:37:49', 'wanjia');
+INSERT INTO `pay_way` VALUES ('3', '5', 'test', '2018-07-10 12:15:17', '2018-07-10 12:26:04', 'wanjia');
+
+-- ----------------------------
+-- Table structure for `pay_way_channel`
+-- ----------------------------
+DROP TABLE IF EXISTS `pay_way_channel`;
+CREATE TABLE `pay_way_channel` (
+  `tid` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `gameId` int(11) NOT NULL,
+  `sdkVer` varchar(20) DEFAULT NULL,
+  `channelMasterId` int(11) DEFAULT NULL,
+  `channelScid` varchar(40) DEFAULT NULL,
+  `vachar` int(11) DEFAULT NULL,
+  `permission` varchar(255) DEFAULT NULL,
+  `createTime` datetime DEFAULT NULL,
+  `updateTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`tid`),
+  KEY `tid` (`tid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of pay_way_channel
+-- ----------------------------
+INSERT INTO `pay_way_channel` VALUES ('1', '1', '1.0001', '1', '111', '0', '111', '2018-07-11 18:40:36', '2018-07-26 18:40:41');
 
 -- ----------------------------
 -- Table structure for `t_admin`
@@ -27,7 +94,7 @@ CREATE TABLE `t_admin` (
   `adminRoleName` varchar(255) DEFAULT NULL,
   `adminGames` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_admin
@@ -38,6 +105,7 @@ INSERT INTO `t_admin` VALUES ('6', '7', 'c4ca4238a0b923820dcc509a6f75849b', 'aso
 INSERT INTO `t_admin` VALUES ('7', '1', 'c4ca4238a0b923820dcc509a6f75849b', 'dongxin', '管理员', null);
 INSERT INTO `t_admin` VALUES ('8', '1', '78fe834bbfae488053e1acfa7b4a8393', 'hshy', '管理员', null);
 INSERT INTO `t_admin` VALUES ('9', '1', 'ea3c504ef548c2b435435975665b3f3c', 'tanjie', '管理员', null);
+INSERT INTO `t_admin` VALUES ('10', '10', '098f6bcd4621d373cade4e832627b4f6', 'test', 'test', null);
 
 -- ----------------------------
 -- Table structure for `t_adminrole`
@@ -52,7 +120,7 @@ CREATE TABLE `t_adminrole` (
   `roleName` varchar(255) DEFAULT NULL,
   `topRole` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_adminrole
@@ -62,6 +130,7 @@ INSERT INTO `t_adminrole` VALUES ('6', '2016-07-30 17:37:19', '1', '9,10,11,13,1
 INSERT INTO `t_adminrole` VALUES ('7', '2016-07-30 17:40:51', '1', '2,4,5,6,7,8,9,10,', '测试人员', '测试小哥', '0');
 INSERT INTO `t_adminrole` VALUES ('8', '2016-09-25 11:56:55', '1', '', '', '测试角色5', '0');
 INSERT INTO `t_adminrole` VALUES ('9', '2017-01-09 09:53:51', '3', '17,18,19,20,21,22,23,24,25,', 'aso100', 'aso100', '0');
+INSERT INTO `t_adminrole` VALUES ('10', '2018-06-25 09:35:37', '4', '2,4,5,6,7,8,9,', 'test', 'test', '0');
 
 -- ----------------------------
 -- Table structure for `t_app`
@@ -71,7 +140,7 @@ CREATE TABLE `t_app` (
   `tid` bigint(20) NOT NULL AUTO_INCREMENT,
   `aid` bigint(20) NOT NULL,
   `key` varchar(255) DEFAULT NULL,
-  `app_screte` varchar(255) DEFAULT NULL,
+  `appSecret` varchar(255) DEFAULT NULL,
   `dec` varchar(50) DEFAULT '游戏名称',
   `g_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '游戏类型：0.普通，5.H5',
   `h5_url` varchar(255) DEFAULT NULL COMMENT 'g_type=5时指H5游戏的首页',
@@ -82,7 +151,6 @@ CREATE TABLE `t_app` (
 -- ----------------------------
 -- Records of t_app
 -- ----------------------------
-INSERT INTO `t_app` VALUES ('1', '50001', 'abcdefg', 'cd604da01c4fbbeeb743b45038a0ed5a', '灵域仙魔2', '0', null, null);
 INSERT INTO `t_app` VALUES ('2', '10002', '6b3165b37de86a3c888110589f09e6e0', '31b1baf85aedf5485dee69f3ec071b72', '一刀霸业IOS', '0', null, null);
 INSERT INTO `t_app` VALUES ('3', '10003', '3d9ddaa720c84550814150f8ca7e8daf', 'f599c66ba608e4ec91227713e37063ff', '仙魔奇谈IOS', '0', null, null);
 INSERT INTO `t_app` VALUES ('4', '50002', '33017a06042fc7d4140e5ff81cfe9438', 'fcb44f36d02fe02e83d7260ee7731e47', '剑谱契约', '0', null, null);
@@ -91,7 +159,6 @@ INSERT INTO `t_app` VALUES ('6', '50004', '3c6ba4b0f84f305b577a8bdaf4d51042', 'e
 INSERT INTO `t_app` VALUES ('7', '50005', '2ff8e66e42cad21545474c2b1238a188', '0307115693080786593ff2c70e09d4c8', '梦想江湖', '0', null, null);
 INSERT INTO `t_app` VALUES ('8', '50006', 'a400572c1ddb71f0f1d1d979e6e7d6c0', '6b976b483c7576160432aae2a5fdaf80', '洪荒之刃', '0', null, null);
 INSERT INTO `t_app` VALUES ('9', '10004', 'b01d8bce09f4a6d3c7fef61261183ca7', 'd299f35450b562b09362d82561727626', '梦想昆仑IOS', '0', null, null);
-INSERT INTO `t_app` VALUES ('10', '50007', '52929c3d4794dba34630f9e00f0eb9e9', '75694f113ca0c825f6709f54733d0fc3', '塔王之王（严蕊需求）', '0', null, null);
 INSERT INTO `t_app` VALUES ('11', '10005', '9fdd9904adb8f2b9aee819a7aae8dba1', 'f386c90ed68b69a9895edfa8997e62df', '剑谱契约IOS', '0', null, null);
 INSERT INTO `t_app` VALUES ('12', '10007', '32ffbbe3c428cc983657d6c48469b688', 'e119ec53c0f5e3a85f68134aa3351379', '坦克传奇IOS', '0', null, null);
 INSERT INTO `t_app` VALUES ('13', '10001', 'abcdefg', 'abcdefg', 'IOS测试游戏', '0', null, null);
@@ -129,7 +196,6 @@ INSERT INTO `t_app` VALUES ('61', '500041', '6f39a8fe47079cccc3a6aae21d9d2c19', 
 INSERT INTO `t_app` VALUES ('62', '500042', '350a8c84a63b11db57f5e978ae137018', 'bd30a68e9bbb35b3491c837a42cfffea', '口袋大冒险', '0', null, null);
 INSERT INTO `t_app` VALUES ('63', '500043', '104142cafbc10668ca7799f3861c15ed', '68f4c875fbc3bb5dc4d74230c53239d7', '梦想江湖OL', '0', null, null);
 INSERT INTO `t_app` VALUES ('64', '90001', 'f6f1c9ad6dce2a8f0a0b3e863f9d05f3', '37bda3f47083a96bd795ff797a4c03db', '测试H5', '5', 'http://hp.vanggame.com/index.php', 'http://hp.vanggame.com/test.php');
-INSERT INTO `t_app` VALUES ('66', '500033', '01f019d04516fcf9496ff81e424f31e1', 'd01ebea25cea3809f8108b536f16f75e', '口袋大冒险iOS', '0', '', '');
 
 -- ----------------------------
 -- Table structure for `t_app_fee`
@@ -478,80 +544,80 @@ CREATE TABLE `t_channel` (
   `t_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `channel_id` bigint(20) NOT NULL,
   `channel_name` varchar(255) DEFAULT NULL,
+  `channel_dec` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `create_admin` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`t_id`,`channel_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=80 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_channel
 -- ----------------------------
-INSERT INTO `t_channel` VALUES ('1', '10002', '灵域仙魔2');
-INSERT INTO `t_channel` VALUES ('2', '10003', '剑仆契约（渠道）');
-INSERT INTO `t_channel` VALUES ('3', '10004', '梦想昆仑（渠道）');
-INSERT INTO `t_channel` VALUES ('4', '10005', '沙城主宰（渠道）');
-INSERT INTO `t_channel` VALUES ('5', '10006', '梦想江湖（渠道）');
-INSERT INTO `t_channel` VALUES ('6', '10007', '洪荒之刃（渠道）');
-INSERT INTO `t_channel` VALUES ('7', '80002', '一刀霸业IOS（渠道）');
-INSERT INTO `t_channel` VALUES ('8', '80003', '仙魔奇谈（渠道）');
-INSERT INTO `t_channel` VALUES ('9', '80004', '梦想昆仑IOS版（渠道）');
-INSERT INTO `t_channel` VALUES ('10', '80005', '剑仆契约-iOS');
-INSERT INTO `t_channel` VALUES ('11', '10008', '塔王之王（严蕊需求渠道）');
-INSERT INTO `t_channel` VALUES ('12', '80008', '愉玩-iOS');
-INSERT INTO `t_channel` VALUES ('13', '800081', '坦克传奇(实丰）');
-INSERT INTO `t_channel` VALUES ('14', '800082', '坦克传奇（SOGAGAME）');
-INSERT INTO `t_channel` VALUES ('15', '800041', '创联');
-INSERT INTO `t_channel` VALUES ('25', '80001', 'IOS测试渠道');
-INSERT INTO `t_channel` VALUES ('16', '80009', '蝉大师-iOS');
-INSERT INTO `t_channel` VALUES ('17', '80010', '汇智众横-iOS');
-INSERT INTO `t_channel` VALUES ('18', '10009', '灵域仙魔');
-INSERT INTO `t_channel` VALUES ('19', '800010', '官包-iOS');
-INSERT INTO `t_channel` VALUES ('20', '80011', '群战三国-iOS');
-INSERT INTO `t_channel` VALUES ('21', '80012', '乐堂-iOS');
-INSERT INTO `t_channel` VALUES ('23', '80013', '依然网络-iOS');
-INSERT INTO `t_channel` VALUES ('24', '80014', '玩咖-iOS');
-INSERT INTO `t_channel` VALUES ('30', '80015', 'GMD-AppStore（易赚）-iOS');
-INSERT INTO `t_channel` VALUES ('31', '10010', 'android官包默认渠道');
-INSERT INTO `t_channel` VALUES ('33', '80016', '成都领动');
-INSERT INTO `t_channel` VALUES ('34', '99999', '正式测试渠道');
-INSERT INTO `t_channel` VALUES ('35', '80017', '上海泽思-iOS');
-INSERT INTO `t_channel` VALUES ('41', '10015', '群战三国（谷歌包）');
-INSERT INTO `t_channel` VALUES ('37', '80020', '帅光年-iOS');
-INSERT INTO `t_channel` VALUES ('39', '10012', '龙城烈焰(渠道)');
-INSERT INTO `t_channel` VALUES ('40', '10013', '群战三国-android');
-INSERT INTO `t_channel` VALUES ('42', '80021', '创星-iOS');
-INSERT INTO `t_channel` VALUES ('43', '100010', '梦想江湖(公会渠道藏锋谷)');
-INSERT INTO `t_channel` VALUES ('44', '80022', '手方-iOS');
-INSERT INTO `t_channel` VALUES ('45', '10014', '屠龙之城_android');
-INSERT INTO `t_channel` VALUES ('46', '80023', '野火-iOS');
-INSERT INTO `t_channel` VALUES ('47', '80024', '海外-iOS');
-INSERT INTO `t_channel` VALUES ('48', '80025', '掌讯-iOS');
-INSERT INTO `t_channel` VALUES ('49', '10016', '爆爆堂-万家-android');
-INSERT INTO `t_channel` VALUES ('50', '80026', '乐游四海-iOS');
-INSERT INTO `t_channel` VALUES ('51', '80027', '歌谷-iOS');
-INSERT INTO `t_channel` VALUES ('52', '50001', '龙城无双-iOS');
-INSERT INTO `t_channel` VALUES ('53', '10017', '盖世三国-版署-官包');
-INSERT INTO `t_channel` VALUES ('54', '80028', '加冕加-iOS');
-INSERT INTO `t_channel` VALUES ('55', '80029', '云客IOS');
-INSERT INTO `t_channel` VALUES ('56', '80030', '咪咕-iOS');
-INSERT INTO `t_channel` VALUES ('57', '10018', '昆仑剑-android');
-INSERT INTO `t_channel` VALUES ('58', '80031', '北斗-iOS');
-INSERT INTO `t_channel` VALUES ('59', '80032', '益趣IOS');
-INSERT INTO `t_channel` VALUES ('60', '80033', '云聚-iOS');
-INSERT INTO `t_channel` VALUES ('61', '80034', '神榜');
-INSERT INTO `t_channel` VALUES ('62', '80035', '绚韵网络-iOS');
-INSERT INTO `t_channel` VALUES ('78', '80046', '奕莫网络-iOS');
-INSERT INTO `t_channel` VALUES ('64', '80036', '可鱼-iOS');
-INSERT INTO `t_channel` VALUES ('65', '10020', '永恒苍穹-Android');
-INSERT INTO `t_channel` VALUES ('66', '10021', '御龙战仙-android');
-INSERT INTO `t_channel` VALUES ('67', '10022', '仙域战纪-Android');
-INSERT INTO `t_channel` VALUES ('68', '80037', '三方人子-iOS');
-INSERT INTO `t_channel` VALUES ('69', '80038', '即拓-iOS');
-INSERT INTO `t_channel` VALUES ('70', '80039', '毅诺-iOS');
-INSERT INTO `t_channel` VALUES ('71', '80040', '守迪-iOS');
-INSERT INTO `t_channel` VALUES ('72', '80041', '天津嘉游IOS');
-INSERT INTO `t_channel` VALUES ('73', '80042', '月神-iOS');
-INSERT INTO `t_channel` VALUES ('74', '80043', '昊宇联达IOS');
-INSERT INTO `t_channel` VALUES ('77', '80045', '耀升-iOS');
-INSERT INTO `t_channel` VALUES ('79', '80047', '流烨-ios');
+INSERT INTO `t_channel` VALUES ('4', '10005', '沙城主宰（渠道）', null, null, null);
+INSERT INTO `t_channel` VALUES ('5', '10006', '梦想江湖（渠道）', null, null, null);
+INSERT INTO `t_channel` VALUES ('6', '10007', '洪荒之刃（渠道）', null, null, null);
+INSERT INTO `t_channel` VALUES ('7', '80002', '一刀霸业IOS（渠道）', null, null, null);
+INSERT INTO `t_channel` VALUES ('8', '80003', '仙魔奇谈（渠道）', null, null, null);
+INSERT INTO `t_channel` VALUES ('9', '80004', '梦想昆仑IOS版（渠道）', null, null, null);
+INSERT INTO `t_channel` VALUES ('10', '80005', '剑仆契约-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('11', '10008', '塔王之王（严蕊需求渠道）', null, null, null);
+INSERT INTO `t_channel` VALUES ('12', '80008', '愉玩-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('13', '800081', '坦克传奇(实丰）', null, null, null);
+INSERT INTO `t_channel` VALUES ('14', '800082', '坦克传奇（SOGAGAME）', null, null, null);
+INSERT INTO `t_channel` VALUES ('15', '800041', '创联', null, null, null);
+INSERT INTO `t_channel` VALUES ('25', '80001', 'IOS测试渠道', null, null, null);
+INSERT INTO `t_channel` VALUES ('16', '80009', '蝉大师-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('17', '80010', '汇智众横-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('18', '10009', '灵域仙魔', null, null, null);
+INSERT INTO `t_channel` VALUES ('19', '800010', '官包-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('20', '80011', '群战三国-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('21', '80012', '乐堂-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('23', '80013', '依然网络-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('24', '80014', '玩咖-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('30', '80015', 'GMD-AppStore（易赚）-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('31', '10010', 'android官包默认渠道', null, null, null);
+INSERT INTO `t_channel` VALUES ('33', '80016', '成都领动', null, null, null);
+INSERT INTO `t_channel` VALUES ('34', '99999', '正式测试渠道', null, null, null);
+INSERT INTO `t_channel` VALUES ('35', '80017', '上海泽思-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('41', '10015', '群战三国（谷歌包）', null, null, null);
+INSERT INTO `t_channel` VALUES ('37', '80020', '帅光年-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('39', '10012', '龙城烈焰(渠道)', null, null, null);
+INSERT INTO `t_channel` VALUES ('40', '10013', '群战三国-android', null, null, null);
+INSERT INTO `t_channel` VALUES ('42', '80021', '创星-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('43', '100010', '梦想江湖(公会渠道藏锋谷)', null, null, null);
+INSERT INTO `t_channel` VALUES ('44', '80022', '手方-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('45', '10014', '屠龙之城_android', null, null, null);
+INSERT INTO `t_channel` VALUES ('46', '80023', '野火-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('47', '80024', '海外-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('48', '80025', '掌讯-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('49', '10016', '爆爆堂-万家-android', null, null, null);
+INSERT INTO `t_channel` VALUES ('50', '80026', '乐游四海-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('51', '80027', '歌谷-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('52', '50001', '龙城无双-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('53', '10017', '盖世三国-版署-官包', null, null, null);
+INSERT INTO `t_channel` VALUES ('54', '80028', '加冕加-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('55', '80029', '云客IOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('56', '80030', '咪咕-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('57', '10018', '昆仑剑-android', null, null, null);
+INSERT INTO `t_channel` VALUES ('58', '80031', '北斗-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('59', '80032', '益趣IOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('60', '80033', '云聚-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('61', '80034', '神榜', null, null, null);
+INSERT INTO `t_channel` VALUES ('62', '80035', '绚韵网络-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('78', '80046', '奕莫网络-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('64', '80036', '可鱼-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('65', '10020', '永恒苍穹-Android', null, null, null);
+INSERT INTO `t_channel` VALUES ('66', '10021', '御龙战仙-android', null, null, null);
+INSERT INTO `t_channel` VALUES ('67', '10022', '仙域战纪-Android', null, null, null);
+INSERT INTO `t_channel` VALUES ('68', '80037', '三方人子-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('69', '80038', '即拓-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('70', '80039', '毅诺-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('71', '80040', '守迪-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('72', '80041', '天津嘉游IOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('73', '80042', '月神-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('74', '80043', '昊宇联达IOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('77', '80045', '耀升-iOS', null, null, null);
+INSERT INTO `t_channel` VALUES ('79', '80047', '流烨-ios', null, null, null);
 
 -- ----------------------------
 -- Table structure for `t_log`
@@ -2139,7 +2205,7 @@ CREATE TABLE `t_pay_record` (
   `ext2` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`tid`,`orderId`),
   UNIQUE KEY `record` (`orderId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=77772 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2001 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_pay_record
@@ -4911,20 +4977,19 @@ CREATE TABLE `t_usysmenu` (
   `parentID` int(11) DEFAULT NULL,
   `path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_usysmenu
 -- ----------------------------
 INSERT INTO `t_usysmenu` VALUES ('2', '2016-07-29 15:03:23', '权限管理', '0', null);
-INSERT INTO `t_usysmenu` VALUES ('4', '2016-07-29 15:03:23', '管理员', '2', 'admin/adminRoleManage');
+INSERT INTO `t_usysmenu` VALUES ('4', null, '管理员', '2', 'admin/adminRoleManage');
 INSERT INTO `t_usysmenu` VALUES ('5', '2016-07-29 15:32:41', '权限分配', '2', 'admin/adminPermissionManage');
 INSERT INTO `t_usysmenu` VALUES ('6', '2016-07-29 15:35:07', '渠道管理', '0', null);
-INSERT INTO `t_usysmenu` VALUES ('7', '2016-07-29 15:35:34', '渠道管理', '6', 'admin/channels/channelManage');
 INSERT INTO `t_usysmenu` VALUES ('8', '2016-07-29 15:35:45', '渠道商管理', '6', 'admin/channelMaster/showChannelMasters');
 INSERT INTO `t_usysmenu` VALUES ('9', '2016-07-29 15:36:06', '游戏管理', '0', null);
 INSERT INTO `t_usysmenu` VALUES ('10', '2016-07-29 15:36:19', '游戏管理', '9', 'admin/games/showGames');
-INSERT INTO `t_usysmenu` VALUES ('11', '2016-07-29 15:37:02', '用户管理', '0', null);
+INSERT INTO `t_usysmenu` VALUES ('11', '2016-07-29 15:37:02', '支付管理', '0', null);
 INSERT INTO `t_usysmenu` VALUES ('12', '2016-07-29 15:37:09', '订单管理', '0', null);
 INSERT INTO `t_usysmenu` VALUES ('13', '2016-07-29 15:37:19', '用户查询', '11', 'admin/users/showUsers');
 INSERT INTO `t_usysmenu` VALUES ('15', '2016-07-29 15:37:39', '订单查询', '12', 'admin/orders/showOrders');
@@ -4937,3 +5002,5 @@ INSERT INTO `t_usysmenu` VALUES ('22', '2016-08-25 19:20:43', '流失和回归',
 INSERT INTO `t_usysmenu` VALUES ('23', '2016-08-25 19:20:54', '收入数据', '17', 'analytics/money');
 INSERT INTO `t_usysmenu` VALUES ('24', '2016-08-25 19:21:51', '付费渗透', '17', 'analytics/pay');
 INSERT INTO `t_usysmenu` VALUES ('25', '2016-08-25 19:21:52', '付费转化', '17', 'analytics/payratio');
+INSERT INTO `t_usysmenu` VALUES ('26', '2018-07-09 16:56:50', '支付方式', '6', 'admin/payway/showPayWay');
+INSERT INTO `t_usysmenu` VALUES ('27', '2018-07-13 15:01:26', '支付渠道', '6', 'admin/payway/payWayChannel');
