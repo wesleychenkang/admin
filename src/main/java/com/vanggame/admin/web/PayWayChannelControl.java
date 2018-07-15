@@ -2,6 +2,8 @@ package com.vanggame.admin.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,13 @@ public class PayWayChannelControl extends BaseControl {
 		json.put("rows", array);
 		json.put("total", payWayService.getAllPayChannelCount());
 		return json.toString();
+	}
+
+	@RequestMapping(value = "savePayWayChannnel")
+	public void savePayWayChannel(HttpServletRequest request) {
+		String ali = request.getParameter("ali");
+		System.out.println("ali" + ali);
+
 	}
 
 }

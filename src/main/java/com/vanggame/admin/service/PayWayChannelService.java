@@ -22,4 +22,24 @@ public class PayWayChannelService {
 
 		return payWayChannelDao.queryAllPayWayChannelCount();
 	}
+
+	public void savePayWayChannel(PayWayChannel channel) {
+
+		try {
+
+			payWayChannelDao.addPayWayChannel(channel);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	public void savePayVsChannel(List<String> payWayIds, Integer payWayChannelId) {
+		try {
+			payWayChannelDao.addPayVsChannel(payWayIds, payWayChannelId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
 }

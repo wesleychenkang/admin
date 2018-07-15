@@ -5,7 +5,7 @@
   Time: 14:01
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%
   String path = request.getContextPath();
   String basePath = request.getScheme()+"://"+request.getServerName()+":"+8080+path;
@@ -14,110 +14,136 @@
 <base href="<%=basePath%>">
 <html>
 <head>
-  <title></title>
+<title></title>
 
-  <link rel="stylesheet" type="text/css" href="<%=basePath%>/js/plugins/easyui/themes/black/easyui.css">
-  <link rel="stylesheet" type="text/css" href="<%=basePath%>/js/plugins/easyui/themes/icon.css">
-  <link rel="stylesheet" type="text/css" href="<%=basePath%>/js/plugins/easyui/themes/color.css">
-  <link rel="stylesheet" type="text/css" href="<%=basePath%>/css/u8server.css">
+<link rel="stylesheet" type="text/css"
+	href="<%=basePath%>/js/plugins/easyui/themes/black/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="<%=basePath%>/js/plugins/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css"
+	href="<%=basePath%>/js/plugins/easyui/themes/color.css">
+<link rel="stylesheet" type="text/css"
+	href="<%=basePath%>/css/u8server.css">
 
-  <script type="text/javascript" src="<%=basePath%>/js/plugins/easyui/jquery.min.js"></script>
-  <script type="text/javascript" src="<%=basePath%>/js/plugins/easyui/jquery.easyui.min.js"></script>
-  <script type="text/javascript" src="<%=basePath%>/js/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript"
+	src="<%=basePath%>/js/plugins/easyui/jquery.min.js"></script>
+<script type="text/javascript"
+	src="<%=basePath%>/js/plugins/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="<%=basePath%>/js/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
 
 </head>
 <body>
-  <div id="games">
+	<div id="games"></div>
 
-  </div>
+	<div id="easyui_toolbar" region="north" border="false">
+		<div class="toolbar">
+			<div style="float: left;">
+				<a class="easyui-linkbutton" plain="true" icon="icon-add"
+					onclick="javascript:showAddDialog();">新增</a>
+			</div>
 
-  <div id="easyui_toolbar" region="north" border="false"
-        >
-    <div class="toolbar">
-      <div style="float: left;">
-        <a class="easyui-linkbutton" plain="true" icon="icon-add" onclick="javascript:showAddDialog();">新增</a>
-      </div>
+			<div class="datagrid-btn-separator"></div>
 
-      <div class="datagrid-btn-separator"></div>
+			<div style="float: left;">
+				<a class="easyui-linkbutton" plain="true" icon="icon-edit"
+					onclick="javascript:showEditDialog();">编辑</a>
+			</div>
 
-      <div style="float: left;">
-        <a class="easyui-linkbutton" plain="true" icon="icon-edit" onclick="javascript:showEditDialog();">编辑</a>
-      </div>
+			<div class="datagrid-btn-separator"></div>
 
-      <div class="datagrid-btn-separator"></div>
+			<div style="float: left;">
+				<a class="easyui-linkbutton" plain="true" icon="icon-filter"
+					onclick="javascript:showDetailDialog();">详细信息</a>
+			</div>
 
-      <div style="float: left;">
-        <a class="easyui-linkbutton" plain="true" icon="icon-filter" onclick="javascript:showDetailDialog();">详细信息</a>
-      </div>
+			<div class="datagrid-btn-separator"></div>
 
-      <div class="datagrid-btn-separator"></div>
+			<div style="float: left;">
+				<a class="easyui-linkbutton" plain="true" icon="icon-remove"
+					onclick="javascript:deleteGame();">删除</a>
+			</div>
 
-      <div style="float: left;">
-        <a class="easyui-linkbutton" plain="true"
-           icon="icon-remove" onclick="javascript:deleteGame();">删除</a>
-      </div>
+			<div id="tb" style="float: right;">
+				<input id="search_box" class="easyui-searchbox"
+					style="width: 250px; height: 25px;"
+					data-options="searcher:doSearch,prompt:'请输入查询词',menu:'#search_menu'" />
+				<div id="search_menu" style="width: 100px;">
+					<div data-options="name:'tid'">编号</div>
+					<div data-options="name:'gameId'">游戏ID</div>
+					<div data-options="name:'sdkVer'">sdk版本</div>
+					<div data-options="name:'payWays'">当前配置</div>
+					<div data-options="name:'createTime'">添加时间</div>
+					<div data-options="name:'updateTime'">添加时间</div>
+					<div data-options="name:'permission'">更新时间</div>
+				</div>
+			</div>
+		</div>
 
-      <div id="tb" style="float: right;">
-        <input id="search_box" class="easyui-searchbox" style="width: 250px;height: 25px;"  data-options="searcher:doSearch,prompt:'请输入查询词',menu:'#search_menu'" />
-        <div id="search_menu" style="width:100px;">
-          <div data-options="name:'tid'">编号</div>
-          <div data-options="name:'gameId'">游戏ID</div>
-          <div data-options="name:'sdkVer'">sdk版本</div>
-          <div data-options="name:'payWays'">当前配置</div>
-          <div data-options="name:'createTime'">添加时间</div>
-           <div data-options="name:'updateTime'">添加时间</div>
-            <div data-options="name:'permission'">更新时间</div>
-        </div>
-      </div>
-    </div>
+	</div>
 
-  </div>
+	<div id="dialog_add" class="easyui-dialog u8_form" closed="true"
+		buttons="#dlg-buttons" style="height: 300px">
+		<div class="ftitle">渠道支付详细信息</div>
+		<form id="fm" method="post" novalidate>
+			<input id="tid" type="hidden" name="tid" />
+			<div class="u8_form_row">
+				<label>支付ID：</label> <input type="text" class="easyui-textbox"
+					style="height: 25px;" name="payWayId" maxlength="255"
+					required="false" />
+			</div>
+			<div style="padding: 10px">
+				<input type="checkbox" name="ali" value="01"><span>支付宝</span>
+				<input type="checkbox" name="wechat" value="02"><span>微信</span>
+				<input type="checkbox" name="apple" value="03"><span>苹果</span>
+				<input type="checkbox" name="aibei" value="04"><span>爱贝</span>
+				<input type="checkbox" name="varh" value="05"><span>代金券</span>
+			</div>
 
-  <div id="dialog_add" class="easyui-dialog u8_form"
-       closed="true" buttons="#dlg-buttons" style="height: 300px">
-    <div class="ftitle">支付信息</div>
-    <form id="fm" method="post" novalidate>
-      <input id="tid" type="hidden" name="tid" />
-      <div class="u8_form_row">
-        <label >支付ID：</label>
-        <input type="text" class="easyui-textbox" style="height: 25px;" name="payWayId" maxlength="255" required="false" />
-      </div>
-      
-      <div class="u8_form_row">
-        <label >支付名称：</label>
-        <input type="text" class="easyui-textbox" style="height: 25px;" name="payWayName" maxlength="255" required="false" />
-      </div>
-    </form>
-  </div>
-  <div id="dlg-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="saveGame()" style="width:90px">保 存</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#dialog_add').dialog('close')" style="width:90px">取 消</a>
-  </div>
+			<div class="u8_form_row">
+				<label>支付名称：</label> <input type="text" class="easyui-textbox"
+					style="height: 25px;" name="payWayName" maxlength="255"
+					required="false" />
+			</div>
+			<div></div>
+		</form>
+	</div>
+	<div id="dlg-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton c6"
+			onclick="saveGame()" style="width: 90px">保 存</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton"
+			onclick="javascript:$('#dialog_add').dialog('close')"
+			style="width: 90px">取 消</a>
+	</div>
 
 
-  <div id="dialog_detail" class="easyui-dialog u8_form"
-       closed="true" buttons="#dlg-buttons-edit" style="height: 430px;">
-    <div class="ftitle">支付详细信息</div>
-    <form id="fm_edit" method="post" novalidate>
+	<div id="dialog_detail" class="easyui-dialog u8_form" closed="true"
+		buttons="#dlg-buttons-edit" style="height: 430px;">
+		<div class="ftitle">渠道支付详细信息</div>
+		<form id="fm_edit" method="post" novalidate>
 
-      <div class="u8_form_row">
-        <label >支付ID：</label>
-        <input type="text" class="easyui-textbox" style="height: 25px;" name="payWayId" readonly="readonly" novalidate/>
-      </div>
+			<div class="u8_form_row">
+				<label>支付ID：</label> <input type="text" class="easyui-textbox"
+					style="height: 25px;" name="payWayId" readonly="readonly"
+					novalidate />
+			</div>
 
-      <div class="u8_form_row">
-        <label >支付名称：</label>
-        <input type="text" class="easyui-textbox" style="height: 25px;" name="payWayName" readonly="readonly" novalidate/>
-      </div>
+			<div class="u8_form_row">
+				<label>支付名称：</label> <input type="text" class="easyui-textbox"
+					style="height: 25px;" name="payWayName" readonly="readonly"
+					novalidate />
+			</div>
 
-    </form>
-  </div>
-  <div id="dlg-buttons-edit">
+		</form>
+	</div>
+	<div id="dlg-buttons-edit">
 
-    <a href="javascript:void(0)" class="easyui-linkbutton c6" onclick="javascript:$('#dialog_detail').dialog('close')" style="width:90px">确 定</a>
-  </div>
+		<a href="javascript:void(0)" class="easyui-linkbutton c6"
+			onclick="javascript:$('#dialog_detail').dialog('close')"
+			style="width: 90px">确 定</a>
+	</div>
 
-  <script type="text/javascript">
+	<script type="text/javascript">
 
     var url;
     function showAddDialog(){
@@ -132,7 +158,7 @@
       $("#appID").val("");
 
 
-      url = '<%=basePath%>/admin/payway/savePayWay';
+      url = '<%=basePath%>/admin/payway/savePayWayChannnel';
 
     }
 

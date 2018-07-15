@@ -4,55 +4,87 @@
 
 <mapper namespace="com.vanggame.admin.dao.PayWayChannelDao">
 	<select id="queryAllPayWayChannelCount" resultType="java.lang.Integer">
-		select count(*) from pay_way_channel
-	</select>  
-	
+		select
+		count(*) from pay_way_channel
+	</select>
+
 	<resultMap type="PayWayChannel" id="c">
-	 <id column="tid" property="tid"/>
-	 <result column="gameId" property="gameId"/>
-	 <result column="sdkVer" property="sdkVer"/>
-	 <result column="channelMasterId" property="channelMasterId"/>
-	 <result column="channelScid" property="channelScid"/>
-	 <result column="permission" property="permission"/>
-	 <result column="createTime" property="createTime"/>
-	 <result column="updateTime" property="updateTime"/>
-	 <collection property="payWay" ofType="PayWay">
-	     <id column="tid2" property="tid"/>
-	     <result column="payWayId" property="payWayId"/>
-	     <result column="payWayName" property="payWayName"/>
-	 </collection>
+		<id column="tid" property="tid" />
+		<result column="gameId" property="gameId" />
+		<result column="sdkVer" property="sdkVer" />
+		<result column="channelMasterId" property="channelMasterId" />
+		<result column="channelScid" property="channelScid" />
+		<result column="permission" property="permission" />
+		<result column="createTime" property="createTime" />
+		<result column="updateTime" property="updateTime" />
+		<collection property="payWay" ofType="PayWay">
+			<id column="tid2" property="tid" />
+			<result column="payWayId" property="payWayId" />
+			<result column="payWayName" property="payWayName" />
+		</collection>
 	</resultMap>
 	<select id="queryAllPayWayChannel" resultMap="c">
-	SELECT * from pay_way_channel as p LEFT JOIN pay_vs_channel AS vs ON p.tid = vs.pay_channel_id
-	 JOIN pay_way as w ON vs.pay_way_id = w.tid;
+		SELECT * from
+		pay_way_channel as p LEFT JOIN pay_vs_channel AS vs ON p.tid =
+		vs.pay_channel_id
+		JOIN pay_way as w ON vs.pay_way_id = w.tid;
 	</select>
-	
-	<insert id="saveMaster" parameterType="ChannelMaster" useGeneratedKeys="true" keyProperty="t_id" >
-	  insert into t_channel (`channel_id`,channel_name,`channel_dec`,create_time,create_admin) values
-	  (#{channelId},#{channelName},#{channelDec},#{createTime},#{createAdmin})
+
+	<insert id="addPayWayChannel" parameterType="PayWayChannel"
+		useGeneratedKeys="true" keyProperty="tid">
+		insert into pay_way_channel
+		(`gameId`,sdkVer,`channelMasterId`,channelScid,vachar,permission,createTime,updateTime)
+		values
+		(#{gameId},#{sdkVer},#{channelMasterId},#{channelScid},#{vachar},#{permission},#{createTime},#{updateTime})
 	</insert>
-	
-	 <update id="updateMaster" parameterType="ChannelMaster">
-	   update t_channel set channel_id=#{channelId},`channel_name`=#{channelName}, channel_dec=#{channelDec}
-	 ,create_time=#{createTime}, create_admin=#{createAdmin} where t_id=#{tid}
-	 </update>
-	 <delete id="deleteMaster">
-		delete from t_channel where t_id=#{tid}
+
+	<insert id="addPayVsChannel" useGeneratedKeys="true"
+		keyProperty="tid">
+
+		<foreach collection="payWayIds" item='pid' separator=",">
+			insert
+			into pay_vs_channel (pay_channel_id,pay_way_id)
+			values(#{payWayChannelId},#{pid})
+		</foreach>
+	</insert>
+	<update id="updatePayWayChannel" parameterType="PayWayChannel">
+		update
+		pay_way_channel set
+		gameId=#{gameId},`sdkVer`=#{sdkVer},
+		channelMasterId=#{channelMasterId},
+		create_time=#{createTime},
+		channelScid=#{channelScid},
+		vachar=#{vachar}，
+		permission=#{permission}，
+		createTime=#{createTime},
+		updateTime=#{updateTime},
+		where t_id=#{tid}
+	</update>
+
+
+	<delete id="removePayWayChannel">
+		delete from pay_way_channel where
+		tid=#{payWayChannelId}
 	</delete>
-	 
-	
+
+	<delete id="removePayVsChannel">
+		delete from pay_way_channel where
+		pay_channel_id=#{payWayChannelId}
+	</delete>
+
+
 	<sql id="where">
-	 <where>
-	   <if test="channelId!=null">
-	      channel_id=#{channelId}
-	    </if>
-	    <if test="channelName!=null">
-	      and  `channel_name` LIKE "%"#{channelName}"%"
-	    </if> 
-	 </where>  
-	  <if test="currIndex!=null and pageSize!=null">
-	      limit #{currIndex},#{pageSize}
-	 </if>
-	 </sql>
-	 </mapper>
+		<where>
+			<if test="channelId!=null">
+				channel_id=#{channelId}
+			</if>
+			<if test="channelName!=null">
+				and `channel_name` LIKE "%"#{channelName}"%"
+			</if>
+		</where>
+		<if test="currIndex!=null and pageSize!=null">
+			limit #{currIndex},#{pageSize}
+		</if>
+	</sql>
+</mapper>
     
